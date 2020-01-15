@@ -10,6 +10,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
@@ -27,13 +28,17 @@ public class Drop extends ApplicationAdapter {
 	private Rectangle bucket;
 	private Array<Rectangle> raindrops;
 	private long lastDropTime;
+	private int puntuacion=0;
+	private String marcador="Score: "+puntuacion;
+	private SpriteBatch spriteBatch;
+	private BitmapFont mostrar;
 
 	@Override
 	public void create() {
 		// load the images for the droplet and the bucket, 64x64 pixels each
 		dropImage = new Texture(Gdx.files.internal("droplet.png"));
 		bucketImage = new Texture(Gdx.files.internal("bucket.png"));
-
+		mostrar=new BitmapFont();
 		// load the drop sound effect and the rain background "music"
 		dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
 		rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
@@ -46,7 +51,7 @@ public class Drop extends ApplicationAdapter {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 800, 480);
 		batch = new SpriteBatch();
-
+	spriteBatch=new SpriteBatch();
 		// create a Rectangle to logically represent the bucket
 		bucket = new Rectangle();
 		bucket.x = 800 / 2 - 64 / 2; // center the bucket horizontally
@@ -77,7 +82,7 @@ public class Drop extends ApplicationAdapter {
 		// of the color to be used to clear the screen.
 		Gdx.gl.glClearColor(0, 0, 0.2f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
+		marcador="Score: "+puntuacion;
 		// tell the camera to update its matrices.
 		camera.update();
 
@@ -93,11 +98,14 @@ public class Drop extends ApplicationAdapter {
 			batch.draw(dropImage, raindrop.x, raindrop.y);
 		}
 		batch.end();
-
+	spriteBatch.begin();
+	mostrar.draw(spriteBatch,marcador,25,953);
+	spriteBatch.end();
 		// process user input
 		if(Gdx.input.isTouched()) {
 			Vector3 touchPos = new Vector3();
 			touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+			System.out.println(touchPos);
 			camera.unproject(touchPos);
 			bucket.x = touchPos.x - 64 / 2;
 		}
@@ -120,6 +128,7 @@ public class Drop extends ApplicationAdapter {
 			if(raindrop.y + 64 < 0) iter.remove();
 			if(raindrop.overlaps(bucket)) {
 				dropSound.play();
+				puntuacion++;
 				iter.remove();
 			}
 		}
