@@ -1,8 +1,10 @@
 package com.badlogic.drop;
 
+import java.awt.Dialog;
 import java.util.Iterator;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
@@ -22,6 +24,7 @@ public class Drop extends ApplicationAdapter {
 	private Texture dropImage;
 	private Texture bucketImage;
 	private Sound dropSound;
+	private Sound endGame;
 	private Music rainMusic;
 	private SpriteBatch batch;
 	private OrthographicCamera camera;
@@ -41,6 +44,7 @@ public class Drop extends ApplicationAdapter {
 		mostrar=new BitmapFont();
 		// load the drop sound effect and the rain background "music"
 		dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
+		endGame = Gdx.audio.newSound(Gdx.files.internal("endGame.wav"));
 		rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
 
 		// start the playback of the background music immediately
@@ -99,7 +103,8 @@ public class Drop extends ApplicationAdapter {
 		}
 		batch.end();
 	spriteBatch.begin();
-	mostrar.draw(spriteBatch,marcador,25,953);
+	//mostrar.draw(spriteBatch,marcador,25,953);
+		mostrar.draw(spriteBatch,marcador,720,480);
 	spriteBatch.end();
 		// process user input
 		if(Gdx.input.isTouched()) {
@@ -125,7 +130,13 @@ public class Drop extends ApplicationAdapter {
 		for (Iterator<Rectangle> iter = raindrops.iterator(); iter.hasNext(); ) {
 			Rectangle raindrop = iter.next();
 			raindrop.y -= 200 * Gdx.graphics.getDeltaTime();
-			if(raindrop.y + 64 < 0) iter.remove();
+			if(raindrop.y + 64 < 0){
+				iter.remove();
+				endGame.play();
+				System.out.println("fin del juego");
+
+			}
+
 			if(raindrop.overlaps(bucket)) {
 				dropSound.play();
 				puntuacion++;
@@ -140,6 +151,7 @@ public class Drop extends ApplicationAdapter {
 		dropImage.dispose();
 		bucketImage.dispose();
 		dropSound.dispose();
+		endGame.dispose();
 		rainMusic.dispose();
 		batch.dispose();
 	}
