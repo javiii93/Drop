@@ -1,6 +1,7 @@
 package com.badlogic.drop;
 
 import java.util.Iterator;
+
 import com.badlogic.gdx.Gdx;
 
 import com.badlogic.gdx.Input.Keys;
@@ -36,8 +37,9 @@ public class GameScreen implements Screen {
     Texture dropImage;
 
     Texture bucketImage;
-  private Texture main;
+    private Texture main;
     private TextureRegion region;
+
     Sound dropSound;
     Music rainMusic;
 
@@ -51,13 +53,9 @@ public class GameScreen implements Screen {
     public static int punt;
     int dropsGathered;
 
-
     public GameScreen(final Drop gam/*,final EndGameScreen en*/) {
 
         this.game = gam;
-        //this.end=en;
-
-
         // load the images for the droplet and the bucket, 64x64 pixels each
 
         dropImage = new Texture(Gdx.files.internal("droplet.png"));
@@ -103,7 +101,7 @@ public class GameScreen implements Screen {
 
         spawnRaindrop();
 
-        region = new TextureRegion(main,0,0,800,480);
+        region = new TextureRegion(main, 0, 0, 800, 480);
     }
 
 
@@ -159,9 +157,8 @@ public class GameScreen implements Screen {
         // all drops
 
         game.batch.begin();
-        game.batch.draw(region,0,0);
-
-        game.font.draw(game.batch, "Gotas Cazadas: " + dropsGathered, 0, 480);
+        game.batch.draw(region, 0, 0);
+        game.font.draw(game.batch, "Gotas Cazadas: " + dropsGathered + ", FPS=" + Gdx.graphics.getFramesPerSecond(), 0, 480);
 
         game.batch.draw(bucketImage, bucket.x, bucket.y);
 
@@ -232,7 +229,7 @@ public class GameScreen implements Screen {
             if (raindrop.y + 64 < 0) {
                 iter.remove();
                 System.out.println("Fin del juego");
-                punt=dropsGathered;
+                punt = dropsGathered;
                 game.setScreen(new EndGameScreen(game));
                 dispose();
             }
