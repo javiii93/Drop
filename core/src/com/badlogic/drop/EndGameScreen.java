@@ -9,21 +9,26 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+
+import static com.badlogic.drop.GameScreen.punt;
 
 
 public class EndGameScreen implements Screen {
 
-   final Drop game;
+    final Drop game;
 
     OrthographicCamera camera;
     Sound endGame;
-    boolean b=true;
+    boolean b = true;
+    Texture main;
+
 
     public EndGameScreen(final Drop gam) {
 
         game = gam;
         endGame = Gdx.audio.newSound(Gdx.files.internal("endGame.wav"));
-
+        main = new Texture(Gdx.files.internal("rainPicture.jpg"));
         camera = new OrthographicCamera();
 
         camera.setToOrtho(false, 800, 480);
@@ -47,15 +52,15 @@ public class EndGameScreen implements Screen {
 
 
         game.batch.begin();
-        game.font.draw(game.batch, "Se ha acabado el juego Drop!!! ", 100, 150);
+        game.font.draw(game.batch, "Se ha acabado el juego Drop!!! Tu puntuacion es de: " + punt, 100, 150);
 
         game.font.draw(game.batch, "Pulsa cualquier parte para volver a empezar!", 100, 100);
 
         game.batch.end();
-if(b){
-    endGame.play();
-    b=false;
-}
+        if (b) {
+            endGame.play();
+            b = false;
+        }
 
 
         if (Gdx.input.isTouched()) {

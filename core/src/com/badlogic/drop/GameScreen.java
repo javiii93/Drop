@@ -46,7 +46,7 @@ public class GameScreen implements Screen {
     Array<Rectangle> raindrops;
 
     long lastDropTime;
-
+    public static int punt;
     int dropsGathered;
 
 
@@ -228,6 +228,7 @@ public class GameScreen implements Screen {
             if (raindrop.y + 64 < 0) {
                 iter.remove();
                 System.out.println("Fin del juego");
+                punt=dropsGathered;
                 game.setScreen(new EndGameScreen(game));
                 dispose();
             }
