@@ -10,14 +10,15 @@ import com.badlogic.gdx.graphics.GL20;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 
 import static com.badlogic.drop.GameScreen.punt;
 
 
 public class EndGameScreen implements Screen {
-
     final Drop game;
-
+    private TextureRegion region;
     OrthographicCamera camera;
     Sound endGame;
     boolean b = true;
@@ -28,23 +29,20 @@ public class EndGameScreen implements Screen {
 
         game = gam;
         endGame = Gdx.audio.newSound(Gdx.files.internal("endGame.wav"));
-        main = new Texture(Gdx.files.internal("rainPicture.jpg"));
+        main = new Texture(Gdx.files.internal("rainPicture.png"));
+
         camera = new OrthographicCamera();
 
         camera.setToOrtho(false, 800, 480);
-
+        region = new TextureRegion(main,0,0,800,480);
 
     }
-
-
     @Override
 
     public void render(float delta) {
 
-        Gdx.gl.glClearColor(0, 0, 0.2f, 1);
-
+        Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
 
         camera.update();
 
@@ -52,10 +50,10 @@ public class EndGameScreen implements Screen {
 
 
         game.batch.begin();
+        game.batch.draw(region,0,0);
         game.font.draw(game.batch, "Se ha acabado el juego Drop!!! Tu puntuacion es de: " + punt, 100, 150);
 
         game.font.draw(game.batch, "Pulsa cualquier parte para volver a empezar!", 100, 100);
-
         game.batch.end();
         if (b) {
             endGame.play();
@@ -112,6 +110,7 @@ public class EndGameScreen implements Screen {
     @Override
 
     public void dispose() {
+
         endGame.dispose();
 
     }

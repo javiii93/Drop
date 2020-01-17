@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 
 import com.badlogic.gdx.graphics.Texture;
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 
 import com.badlogic.gdx.math.Rectangle;
@@ -35,7 +36,8 @@ public class GameScreen implements Screen {
     Texture dropImage;
 
     Texture bucketImage;
-
+  private Texture main;
+    private TextureRegion region;
     Sound dropSound;
     Music rainMusic;
 
@@ -59,6 +61,7 @@ public class GameScreen implements Screen {
         // load the images for the droplet and the bucket, 64x64 pixels each
 
         dropImage = new Texture(Gdx.files.internal("droplet.png"));
+        main = new Texture(Gdx.files.internal("yellowWater.png"));
 
         bucketImage = new Texture(Gdx.files.internal("bucket.png"));
 
@@ -100,7 +103,7 @@ public class GameScreen implements Screen {
 
         spawnRaindrop();
 
-
+        region = new TextureRegion(main,0,0,800,480);
     }
 
 
@@ -156,6 +159,7 @@ public class GameScreen implements Screen {
         // all drops
 
         game.batch.begin();
+        game.batch.draw(region,0,0);
 
         game.font.draw(game.batch, "Gotas Cazadas: " + dropsGathered, 0, 480);
 
